@@ -22,7 +22,7 @@ This workflow will build a .NET MAUI iOS application and store it in GitHub arti
 - `production-branch-name`: The branch name to use for production environment'
 - `staging-branch-pattern`: The branch pattern to use for staging environment
 
-## Secrets
+## Repository Secrets
 
 #### Required
 
@@ -30,6 +30,15 @@ This workflow will build a .NET MAUI iOS application and store it in GitHub arti
 - `IOS_SIGNING_CERTIFICATE_PASSWORD`: The iOS signing certificate password
 - `IOS_PROVISIONING_PROFILE_BASE64`: The base64 encoded iOS provisioning profile
 - `IOS_KEYCHAIN_PASSWORD`: The iOS keychain password
+
+Use the following commands to get the base64 string of the files from their local directory:
+
+```powershell
+base64 -i BUILD_CERTIFICATE.p12 | pbcopy
+base64 -i PROVISIONING_PROFILE.mobileprovision | pbcopy
+```
+
+The SIGNING_CERTIFICATE_PASSWORD is created by you when you export it.
 
 Follow [this guide](https://developer.apple.com/help/account/certificates/certificates-overview) for Apple certificate & provisioning profile information
 

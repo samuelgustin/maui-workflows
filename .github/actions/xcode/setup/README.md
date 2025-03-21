@@ -15,7 +15,7 @@ This action sets up Xcode for your runner to build iOS applications.
 
 - `xcode-version`: The version of Xcode to install
 
-## Repository Configuration
+## Repository Secrets
 
 I suggest that you add the following secrets to your repository (or github organization).
 
@@ -26,10 +26,12 @@ I suggest that you add the following secrets to your repository (or github organ
 
 Use the following commands to get the base64 string of the files from their local directory:
 
-- `base64 -i BUILD_CERTIFICATE.p12 | pbcopy`
-- `base64 -i PROVISIONING_PROFILE.mobileprovision | pbcopy`
+```powershell
+base64 -i BUILD_CERTIFICATE.p12 | pbcopy
+base64 -i PROVISIONING_PROFILE.mobileprovision | pbcopy
+```
 
-The `SIGNING_CERTIFICATE_PASSWORD` is created by you when you export it.
+The SIGNING_CERTIFICATE_PASSWORD is created by you when you export it.
 
 ## Usage
 

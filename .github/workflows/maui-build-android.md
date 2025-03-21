@@ -20,7 +20,7 @@ This workflow will build a .NET MAUI Android application and store it in GitHub 
 - `production-branch-name`: The branch name to use for production environment
 - `staging-branch-pattern`: The branch pattern to use for staging environment
 
-## Secrets
+## Repository Secrets
 
 #### Required
 

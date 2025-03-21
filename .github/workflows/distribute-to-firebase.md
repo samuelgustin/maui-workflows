@@ -19,7 +19,7 @@ A tag will be created - `v1.0.0+123-ios` or `v1.0.0+123-android` for runs on the
 - `project-directory:` The directory of the project to build (e.g. MyApp/)
 - `production-branch-name`: The branch name to use for production environment
 
-## Secrets
+## Repository Secrets
 
 #### Required
 
