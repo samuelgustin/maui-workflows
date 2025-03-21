@@ -1,20 +1,20 @@
 # Overview
 
-This repository contains reusable GitHub actions & workflows (Mainly for .NET MAUI)
+This repository contains reusable GitHub actions & workflows for .NET MAUI.
 
 The workflows to build iOS or Android MAUI apps can be used in conjuntion with any distribution workflow.
 
 ## Workflows
 
-- [distribute-to-firebase](https://github.com/samuelgustin/workflows/blob/main/.github/workflows/distribute-to-firebase.md)
-- [maui-build-android](https://github.com/samuelgustin/workflows/blob/main/.github/workflows/maui-build-android.md)
-- [maui-build-ios](https://github.com/samuelgustin/workflows/blob/main/.github/workflows/maui-build-ios.md)
+- [distribute-to-firebase](https://github.com/samuelgustin/maui-workflows/blob/main/.github/workflows/distribute-to-firebase.md)
+- [maui-build-android](https://github.com/samuelgustin/maui-workflows/blob/main/.github/workflows/maui-build-android.md)
+- [maui-build-ios](https://github.com/samuelgustin/maui-workflows/blob/main/.github/workflows/maui-build-ios.md)
 
 ## Actions
 
-- [dotnet-for-maui](https://github.com/samuelgustin/workflows/tree/main/.github/actions/dotnet-for-maui)
-- [xcode/setup](https://github.com/samuelgustin/workflows/tree/main/.github/actions/xcode/setup)
-- [xcode/cleanup](https://github.com/samuelgustin/workflows/tree/main/.github/actions/xcode/cleanup)
+- [dotnet-for-maui](https://github.com/samuelgustin/maui-workflows/tree/main/.github/actions/dotnet/setup-maui)
+- [xcode/setup](https://github.com/samuelgustin/maui-workflows/tree/main/.github/actions/xcode/setup)
+- [xcode/cleanup](https://github.com/samuelgustin/maui-workflows/tree/main/.github/actions/xcode/cleanup)
 
 ## Examples
 
