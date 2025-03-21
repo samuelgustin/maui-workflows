@@ -1,0 +1,41 @@
+name: ".NET Setup for MAUI"
+description: "Setup .NET for MAUI builds"
+
+inputs:
+  dotnet-version:
+    description: "Version of .NET to use"
+    required: true
+  additional-restore-args:
+    description: "Additional arguments to pass to `dotnet restore`"
+    required: false
+  maui-project-directory:
+    description: "MAUI Project directory"
+    required: false
+    default: "."
+    
+runs:
+  using: "composite"
+  steps:
+    - name: Download .NET SDK
+      uses: actions/setup-dotnet@v4.0.1
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+
+    - name: Display dotnet version
+      run: |
+        dotnet --version
+      shell: bash
+            
+    - name: Install MAUI Workload
+      run: dotnet workload install maui --ignore-failed-sources
+      working-directory: ./${{ inputs.maui-project-directory}}
+      shell: bash
+            
+    - name: Restore MAUI Workload
+      run: dotnet workload restore
+      working-directory: ./${{ inputs.maui-project-directory}}
+      shell: bash
+      
+    - name: Restore .NET dependencies
+      run: dotnet restore ${{ inputs.additional-restore-args }}
+      shell: bash

@@ -1,0 +1,76 @@
+name: Distribute to Firebase
+run-name: Distribute to Firebase by @${{ github.actor }}
+description: "Distribute a .ipa or .apk artifact to Firebase App Distribution"
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: 'The name of the artifact to upload'
+        required: true
+        type: string
+      firebase-app-id:
+        type: string
+        description: "The Firebase App ID"
+        required: true
+      project-name:
+        description: 'The name of the project to build'
+        required: true
+        type: string
+      application-platform:
+        type: string
+        description: "The application platform (iOS or Android)"
+        required: true
+      firebase-groups:
+        description: 'The Firebase groups to release the app to'
+        required: false
+        type: string
+      project-directory:
+        description: 'The directory of the project to build (e.g. MyApp/)'
+        required: false
+        type: string
+      production-branch-name:
+        description: 'The branch name to use for production environment'
+        required: false
+        type: string
+        default: 'main'
+    secrets:
+      FIREBASE_TOKEN:
+        description: "Your Firebase token for authentication"
+
+jobs:
+  firebase-upload-ios:
+    runs-on: ubuntu-latest
+    name: Firebase App Upload
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ./app
+
+      - name: Upload app to Firebase
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm i -g firebase-tools
+      - run: firebase appdistribution:distribute ./app/${{ inputs.artifact-name }} --app ${{ inputs.firebase-app-id }} --token ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Get version
+        id: package_version
+        uses: KageKirin/get-csproj-version@v1.0.0
+        with:
+          file: './${{ inputs.project-directory}}${{ inputs.project-name}}.csproj'
+
+      - name: Create tag 
+        uses: rickstaa/action-create-tag@v1.7.2
+        id: "tag_create"
+        with:
+          tag: "v${{ steps.package_version.outputs.version}}+${{github.run_number}}-${{inputs.application-platform}}"
+          tag_exists_error: false
+          message: "Latest release"

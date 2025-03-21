@@ -1,0 +1,64 @@
+name: "Xcode Setup for iOS Builds"
+description: "Install and configure Xcode for iOS builds"
+
+inputs:
+    provisioning-profile-base64:
+      description: 'Base64 encoded string of the iOS provisioning profile to be used'
+      required: true
+      type: string
+    signing-certificate-base64:
+      description: 'Base64 encoded string of the iOS signing certificate to be used'
+      required: true
+      type: string
+    signing-certificate-password:
+      description: 'The password for the iOS signing certificate'
+      required: true
+      type: string
+    keychain-password:
+      description: 'The password for the iOS keychain (can be any value, just needs to be provided)'
+      required: true
+      type: string
+    xcode-version:
+      description: 'The version of Xcode to install'
+      required: false
+      type: string
+      default: '16.2.0'
+
+runs:
+  using: "composite"
+  steps:
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: ${{ inputs.xcode-version }}
+
+      - name: Install the Apple certificate and provisioning profile
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ inputs.signing-certificate-base64 }}
+          P12_PASSWORD: ${{ inputs. signing-certificate-password }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ inputs.provisioning-profile-base64 }}
+          KEYCHAIN_PASSWORD: ${{ inputs.keychain-password }}
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+        shell: bash

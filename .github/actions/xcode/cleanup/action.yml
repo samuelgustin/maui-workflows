@@ -1,0 +1,11 @@
+name: "Xcode Cleanup for Self Hosted Runners"
+description: "Clean up Xcode keychain and provisioning profile for self hosted runners"
+
+runs:
+  using: "composite"
+  steps:
+  - name: Clean up keychain and provisioning profile
+    shell: bash
+    run: |
+      security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+      rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision

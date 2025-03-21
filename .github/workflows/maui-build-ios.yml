@@ -1,0 +1,135 @@
+name: .NET MAUI Build iOS
+description: "Workflow for building .NET MAUI applications for iOS"
+run-name: .NET MAUI Build iOS Executed by @${{ github.actor }}
+
+on:
+  workflow_call:
+    inputs:
+      codesigning-identity:
+        description: "The code signing identity to use for iOS builds"
+        required: true
+        type: string
+      codesigning-provisioning-profile-name:
+        description: "The code signing provisioning profile to use for iOS builds"
+        required: true
+        type: string
+      project-name:
+        description: "The name of the project to build"
+        required: true
+        type: string
+      ipa-filename:
+        description: "The name of the IPA file to upload"
+        required: true
+        type: string
+      macos-runner-name:
+        description: "The type of runner to use"
+        required: false
+        type: string
+        default: "macos-15"
+      xcode-version:
+        description: "Version of Xcode to use, defaults to 16.2.0"
+        required: false
+        type: string
+        default: "16.2.0"
+      dotnet-version:
+        description: "Version of .NET to use, defaults to 9.0.x"
+        required: false
+        type: string
+        default: "9.0.x"
+      dotnet-publish-version:
+        description: "Version of .NET to use for publishing, defaults to 9.0"
+        required: false
+        type: string
+        default: "9.0"
+      project-directory:
+        description: "The directory of the project to build (e.g. MyApp/)"
+        required: false
+        type: string
+      appsettings-filename:
+        description: "The name of the appsettings file"
+        required: false
+        type: string
+      production-branch-name:
+        description: "The branch name to use for production environment"
+        required: false
+        type: string
+        default: "main"
+      staging-branch-pattern:
+        description: "The branch pattern to use for staging environment"
+        required: false
+        type: string
+        default: "staging"
+    secrets:
+      IOS_SIGNING_CERTIFICATE_BASE64:
+        description: "The base64 encoded iOS signing certificate"
+        required: true
+      IOS_SIGNING_CERTIFICATE_PASSWORD:
+        description: "The iOS signing certificate password"
+        required: true
+      IOS_PROVISIONING_PROFILE_BASE64:
+        description: "The base64 encoded iOS provisioning profile"
+        required: true
+      IOS_KEYCHAIN_PASSWORD:
+        description: "The iOS keychain password"
+        required: true
+      APPSETTINGS_BASE64:
+        description: "The base64 encoded appsettings file"
+        required: false
+
+jobs:
+  ios-maui-build:
+    environment: ${{ github.ref_name == inputs.production-branch-name && 'production' || contains(github.ref_name,inputs.staging-branch-pattern) && 'staging' || 'development' }}
+    runs-on: ${{ inputs.macos-runner-name }}
+    name: Build .NET MAUI iOS
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Echo Environment
+        run: echo ${{ github.ref_name == inputs.production-branch-name && 'production' || contains(github.ref_name,inputs.staging-branch-pattern) && 'staging' || 'development' }}
+
+      - name: xcode-setup
+        uses: samuelgustin/workflows/.github/actions/xcode/setup@main
+        with:
+          xcode-version: ${{ inputs.xcode-version }}
+          signing-certificate-base64: ${{ secrets.IOS_SIGNING_CERTIFICATE_BASE64 }}
+          signing-certificate-password: ${{ secrets.IOS_SIGNING_CERTIFICATE_PASSWORD }}
+          provisioning-profile-base64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          keychain-password: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
+
+      - name: Set up .NET for MAUI
+        uses: samuelgustin/workflows/.github/actions/dotnet/setup-maui@main
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+          maui-project-directory: ${{ inputs.project-directory }}
+          additional-restore-args: "-r ios-arm64 ${{inputs.project-directory}}${{ inputs.project-name}}.csproj"
+
+      - name: Pull Config From Secrets
+        if: ${{ !contains(inputs.appsettings-filename, '') }}
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: ${{ inputs.appsettings-filename }}
+          fileDir: "./${{ inputs.project-directory }}"
+          encodedString: ${{ secrets.APPSETTINGS_BASE64 }}
+
+      - name: Get version
+        id: package_version
+        uses: KageKirin/get-csproj-version@v1.0.0
+        with:
+          file: "./${{ inputs.project-directory}}${{ inputs.project-name}}.csproj"
+
+      - name: Build MAUI iOS
+        run: |
+          dotnet publish ${{ inputs.project-directory}}${{ inputs.project-name}}.csproj --no-restore -f net${{ inputs.dotnet-publish-version }}-ios -c Release -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64 -p:CodesignKey="${{inputs.codesigning-identity}}" -p:CodesignProvision="${{inputs.codesigning-provisioning-profile-name}}" /p:ApplicationDisplayVersion="${{steps.package_version.outputs.version}}" /p:ApplicationVersion="${{ github.run_number }}"
+      - name: Upload iOS Artifact
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: ${{inputs.ipa-filename}}
+          path: ${{ inputs.project-directory}}bin/Release/net${{ inputs.dotnet-publish-version }}-ios/ios-arm64/publish/${{inputs.ipa-filename}}
+
+      # Make sure to not use 'Github Actions' in the name of the self hosted runner, as it will cause the cleanup to run on every push
+      - name: Clean up keychain and provisioning profile for self hosted runners
+        if: ${{ !contains(runner.name, 'Github Actions') }}
+        uses: samuelgustin/workflows/.github/actions/xcode/cleanup@main
