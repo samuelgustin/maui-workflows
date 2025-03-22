@@ -105,7 +105,7 @@ jobs:
 
   deploy-android-to-firebase:
     uses: samuelgustin/maui-workflows/.github/workflows/distribute-to-firebase.yml@main
-    needs: maui-buil-android
+    needs: maui-build-android
     with:
       artifact-name: "my_app.apk"
       firebase-groups: "some_group"
