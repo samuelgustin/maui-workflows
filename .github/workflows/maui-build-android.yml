@@ -47,8 +47,8 @@ on:
         type: string
         default: "staging"
     secrets:
-      ANDROID_KEYSTORE_ALIAS:
-        description: "The Android keystore alias"
+      ANDROID_KEYSTORE_FILENAME:
+        description: "The Android keystore filename"
         required: true
       ANDROID_KEYSTORE_BASE64:
         description: "The base64 encoded Android keystore"
@@ -77,8 +77,8 @@ jobs:
       - name: Load keystore from secrets
         uses: timheuer/base64-to-file@v1.2
         with:
-          fileName: "android-cert.keystore"
-          fileDir: "./${{ inputs.project-directory}}"
+          fileName: ${{ secrets.ANDROID_KEYSTORE_FILENAME }}
+          fileDir: "./${{ inputs.project-directory }}"
           encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
 
       - uses: actions/setup-java@v4
@@ -108,7 +108,7 @@ jobs:
           file: "./${{ inputs.project-directory}}${{ inputs.project-name}}.csproj"
 
       - name: Build MAUI Android
-        run: dotnet publish ${{ inputs.project-directory}}${{ inputs.project-name}}.csproj --no-restore -f:net${{ inputs.dotnet-publish-version }}-android -c:Release /p:AndroidSigningKeyPass=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} /p:AndroidSigningStorePass=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} /p:AndroidBuildType="Production" /p:ApplicationDisplayVersion="${{ steps.package_version.outputs.version }}" /p:ApplicationVersion="${{ github.run_number }}"
+        run: dotnet publish ${{ inputs.project-directory}}${{ inputs.project-name}}.csproj --no-restore -f:net${{ inputs.dotnet-publish-version }}-android -c:Release /p:AndroidSigningKeyPass=${{ secrets.ANDROID_KEYSTORE_ALIAS }} /p:AndroidSigningStorePass=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} /p:AndroidBuildType="Production" /p:ApplicationDisplayVersion="${{ steps.package_version.outputs.version }}" /p:ApplicationVersion="${{ github.run_number }}"
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4.3.1
