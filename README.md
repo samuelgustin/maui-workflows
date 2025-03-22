@@ -35,7 +35,7 @@ env:
 
 jobs:
   maui-build-ios:
-    uses: samuelgustin/workflows/.github/workflows/maui-build-ios.yml@main
+    uses: samuelgustin/maui-workflows/.github/workflows/maui-build-ios.yml@main
     with:
       macos-runner-name: "macos-15"
       xcode-version: "16.2"
@@ -57,7 +57,7 @@ jobs:
       APPSETTINGS_BASE64: ${{ secrets.APPSETTINGS_BASE64 }}
 
   deploy-ios-to-firebase:
-    uses: samuelgustin/workflows/.github/workflows/distribute-to-firebase.yml@main
+    uses: samuelgustin/maui-workflows/.github/workflows/distribute-to-firebase.yml@main
     needs: maui-buil-ios
     with:
       artifact-name: "my_app.ipa"
@@ -85,7 +85,7 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true # Disable sending .NET CLI telemetry
 
   maui-build-android:
-    uses: samuelgustin/workflows/.github/workflows/maui-build-android.yml@main
+    uses: samuelgustin/maui-workflows/.github/workflows/maui-build-android.yml@main
     with:
       dotnet-version: "9.0.x"
       dotnet-publish-version: "9.0"
@@ -103,7 +103,7 @@ env:
       APPSETTINGS_BASE64: ${{ secrets.APPSETTINGS_BASE64 }}
 
   deploy-android-to-firebase:
-    uses: samuelgustin/workflows/.github/workflows/distribute-to-firebase.yml@main
+    uses: samuelgustin/maui-workflows/.github/workflows/distribute-to-firebase.yml@main
     needs: maui-buil-android
     with:
       artifact-name: "my_app.apk"

@@ -87,7 +87,7 @@ jobs:
           java-version: ${{ inputs.java-version }}
 
       - name: Set up .NET for MAUI
-        uses: samuelgustin/workflows/.github/actions/dotnet/setup-maui@main
+        uses: samuelgustin/maui-workflows/.github/actions/dotnet/setup-maui@main
         with:
           dotnet-version: ${{ inputs.dotnet-version }}
           additional-restore-args: "${{ inputs.project-directory}}${{ inputs.project-name}}.csproj"

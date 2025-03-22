@@ -52,7 +52,7 @@ jobs:
   # You can customize the build portion here...
 
   deploy-ios-to-firebase:
-    uses: samuelgustin/workflows/.github/workflows/distribute-to-firebase.yml@main
+    uses: samuelgustin/maui-workflows/.github/workflows/distribute-to-firebase.yml@main
     with:
       artifact-name: "my_app.ipa"
       firebase-groups: "some_group"
@@ -65,7 +65,7 @@ jobs:
       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
   deploy-android-to-firebase:
-    uses: samuelgustin/workflows/.github/workflows/distribute-to-firebase.yml@main
+    uses: samuelgustin/maui-workflows/.github/workflows/distribute-to-firebase.yml@main
     with:
       artifact-name: "my_app.apk"
       firebase-groups: "some_group"

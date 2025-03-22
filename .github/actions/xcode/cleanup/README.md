@@ -7,7 +7,7 @@ This action cleans up Xcode form your self hosted runner.
 ```yaml
 - name: Clean up keychain and provisioning profile for self hosted runners
     if: ${{ !contains(runner.name, 'Github Actions') }}
-    uses: samuelgustin/workflows/.github/actions/xcode/cleanup@main
+    uses: samuelgustin/maui-workflows/.github/actions/xcode/cleanup@main
 ```
 
 ## References
