@@ -8,7 +8,7 @@ This workflow will build a .NET MAUI Android application and store it in GitHub 
 
 - `project-name`: The name of the project to build
 - `apk-filename`: The name of the APK file to upload
-  - This will be the `ApplicationId` value from the .csproj file followed by `-Signed.apk` (com.compaynay.mauiapp-Signed.apk)
+  - This will be the `ApplicationId` (bundle id) value from the .csproj file followed by `-Signed.apk` (com.compaynay.mauiapp-Signed.apk)
 
 #### Optional
 

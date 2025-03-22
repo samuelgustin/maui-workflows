@@ -64,8 +64,6 @@ You will need to add the following information to your .csproj file.
 <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
   <!-- CHANGE THESE VALUES -->
   <IpaPackageName>my_app.ipa</IpaPackageName>
-  <CodesignProvision>YOUR_PROVISION_PROFILE_NAME</CodesignProvision>
-  <CodesignKey>YOUR_CERTIFICATE_NAME</CodesignKey>
 
   <!-- TURN OFF THE INTERPRETER IF YOU DON'T NEED IT (its fine to leave on if you don't know) -->
   <!-- https://github.com/dotnet/maui/issues/13019 -->
