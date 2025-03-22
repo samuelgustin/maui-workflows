@@ -37,7 +37,7 @@ The SIGNING_CERTIFICATE_PASSWORD is created by you when you export it.
 
 ```yaml
 - name: Xcode Setup for iOS Builds
-  uses: samuelgustin/.github/actions/xcode/setup@main
+  uses: samuelgustin/maui-workflows/.github/actions/xcode/setup@main
   with:
     xcode-version: ${{ inputs.xcode-version }}
     signing-certificate-base64: ${{ secrets.SIGNING_CERTIFICATE_BASE64 }}

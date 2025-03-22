@@ -74,7 +74,7 @@ env:
 
 jobs:
   maui-build-android:
-    uses: samuelgustin/workflows/.github/workflows/maui-build-android.yml@main
+    uses: samuelgustin/maui-workflows/.github/workflows/maui-build-android.yml@main
     with:
       dotnet-version: "9.0.x"
       dotnet-publish-version: "9.0"

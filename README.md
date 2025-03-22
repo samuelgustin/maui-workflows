@@ -84,6 +84,7 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
   DOTNET_CLI_TELEMETRY_OPTOUT: true # Disable sending .NET CLI telemetry
 
+jobs:
   maui-build-android:
     uses: samuelgustin/maui-workflows/.github/workflows/maui-build-android.yml@main
     with:

@@ -92,7 +92,7 @@ env:
 
 jobs:
   maui-build-ios:
-    uses: samuelgustin/workflows/.github/workflows/maui-build-ios.yml@main
+    uses: samuelgustin/maui-workflows/.github/workflows/maui-build-ios.yml@main
     with:
       macos-runner-name: "macos-15"
       xcode-version: "16.2"
