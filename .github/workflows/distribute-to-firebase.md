@@ -18,6 +18,7 @@ A tag will be created - `v1.0.0+123-ios` or `v1.0.0+123-android` for runs on the
 - `firebase-groups`: The Firebase groups to release the app to
 - `project-directory:` The directory of the project to build (e.g. MyApp/)
 - `production-branch-name`: The branch name to use for production environment
+- `create-tags`: Create tags for the release
 
 ## Repository Secrets
 
@@ -34,6 +35,12 @@ You will need to add the following information to your .csproj file.
 ```xml
 <Version>1.00</Version>
 ```
+
+## Repository Settings
+
+In order to use the tag feature for production releases you must allow this workflow write access to the calling repository.
+
+![calling-repo-settings.png](../../images/calling-repo-settings.png)
 
 ## Usage
 
