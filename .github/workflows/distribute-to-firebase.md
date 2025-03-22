@@ -43,11 +43,6 @@ name: Build & Deploy MAUI iOS
 on:
   workflow_dispatch:
 
-env:
-  DOTNET_NOLOGO: true # Disable the .NET logo
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_CLI_TELEMETRY_OPTOUT: true # Disable sending .NET CLI telemetry
-
 jobs:
   # You can customize the build portion here...
 

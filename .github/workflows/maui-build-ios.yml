@@ -5,14 +5,6 @@ run-name: .NET MAUI Build iOS Executed by @${{ github.actor }}
 on:
   workflow_call:
     inputs:
-      codesigning-identity:
-        description: "The code signing identity to use for iOS builds"
-        required: true
-        type: string
-      codesigning-provisioning-profile-name:
-        description: "The code signing provisioning profile to use for iOS builds"
-        required: true
-        type: string
       project-name:
         description: "The name of the project to build"
         required: true
@@ -60,6 +52,9 @@ on:
         type: string
         default: "staging"
     secrets:
+      IOS_SIGNING_CERTIFICATE_NAME:
+        description: "The iOS signing certificate name"
+        required: true
       IOS_SIGNING_CERTIFICATE_BASE64:
         description: "The base64 encoded iOS signing certificate"
         required: true
@@ -68,6 +63,9 @@ on:
         required: true
       IOS_PROVISIONING_PROFILE_BASE64:
         description: "The base64 encoded iOS provisioning profile"
+        required: true
+      IOS_PROVISIONING_PROFILE_NAME:
+        description: "The iOS provisioning profile name"
         required: true
       IOS_KEYCHAIN_PASSWORD:
         description: "The iOS keychain password"
@@ -122,7 +120,7 @@ jobs:
 
       - name: Build MAUI iOS
         run: |
-          dotnet publish ${{ inputs.project-directory}}${{ inputs.project-name}}.csproj --no-restore -f net${{ inputs.dotnet-publish-version }}-ios -c Release -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64 -p:CodesignKey="${{inputs.codesigning-identity}}" -p:CodesignProvision="${{inputs.codesigning-provisioning-profile-name}}" /p:ApplicationDisplayVersion="${{steps.package_version.outputs.version}}" /p:ApplicationVersion="${{ github.run_number }}"
+          dotnet publish ${{ inputs.project-directory}}${{ inputs.project-name}}.csproj --no-restore -f net${{ inputs.dotnet-publish-version }}-ios -c Release -p:ArchiveOnBuild=true -p:RuntimeIdentifier=ios-arm64 -p:CodesignKey="${{secrets.IOS_SIGNING_CERTIFICATE_NAME}}" -p:CodesignProvision="${{secrets.IOS_PROVISIONING_PROFILE_NAME}}" /p:ApplicationDisplayVersion="${{steps.package_version.outputs.version}}" /p:ApplicationVersion="${{ github.run_number }}"
       - name: Upload iOS Artifact
         uses: actions/upload-artifact@v4.3.1
         with:

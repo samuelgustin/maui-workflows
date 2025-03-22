@@ -6,8 +6,6 @@ This workflow will build a .NET MAUI iOS application and store it in GitHub arti
 
 #### Required
 
-- `codesigning-identity`: The code signing identity to use for iOS builds
-- `codesigning-provisioning-profile-name`: The code signing provisioning profile to use for iOS builds
 - `project-name`: The name of the project to build
 - `ipa-filename`: The name of the IPA file to upload
 
@@ -26,19 +24,22 @@ This workflow will build a .NET MAUI iOS application and store it in GitHub arti
 
 #### Required
 
+- `IOS_SIGNING_CERTIFICATE_NAME`: The iOS signing certificate name
 - `IOS_SIGNING_CERTIFICATE_BASE64`: The base64 encoded iOS signing certificate
 - `IOS_SIGNING_CERTIFICATE_PASSWORD`: The iOS signing certificate password
 - `IOS_PROVISIONING_PROFILE_BASE64`: The base64 encoded iOS provisioning profile
+- `IOS_PROVISIONING_PROFILE_NAME`: The iOS provisioning profile name
 - `IOS_KEYCHAIN_PASSWORD`: The iOS keychain password
 
-Use the following commands to get the base64 string of the files from their local directory:
+Use the following command examples to get the base64 string of the files from their local directory:
 
 ```powershell
 base64 -i BUILD_CERTIFICATE.p12 | pbcopy
 base64 -i PROVISIONING_PROFILE.mobileprovision | pbcopy
 ```
 
-The SIGNING_CERTIFICATE_PASSWORD is created by you when you export it.
+- The `IOS_SIGNING_CERTIFICATE_PASSWORD` is created by you when you export it.
+- You may want to have both a development & distribution certificate in the same repo. If so, make the secrets environment secrets and then use the same `IOS_SIGNING_CERTIFICATE_PASSWORD`.
 
 Follow [this guide](https://developer.apple.com/help/account/certificates/certificates-overview) for Apple certificate & provisioning profile information
 
@@ -84,11 +85,6 @@ name: Build MAUI iOS
 
 on:
   workflow_dispatch:
-
-env:
-  DOTNET_NOLOGO: true # Disable the .NET logo
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_CLI_TELEMETRY_OPTOUT: true # Disable sending .NET CLI telemetry
 
 jobs:
   maui-build-ios:

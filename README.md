@@ -28,19 +28,12 @@ name: Build & Deploy MAUI iOS
 on:
   workflow_dispatch:
 
-env:
-  DOTNET_NOLOGO: true # Disable the .NET logo
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_CLI_TELEMETRY_OPTOUT: true # Disable sending .NET CLI telemetry
-
 jobs:
   maui-build-ios:
     uses: samuelgustin/maui-workflows/.github/workflows/maui-build-ios.yml@main
     with:
       macos-runner-name: "macos-15"
-      xcode-version: "16.2"
-      codesigning-identity: "my_codesigning_identity"
-      codesigning-provisioning-profile-name: "distribution_profile_name"
+      xcode-version: "16.2"=
       dotnet-version: "9.0.x"
       dotnet-publish-version: "9.0"
       project-directory: "my-path/"
@@ -50,9 +43,11 @@ jobs:
       production-branch-name: "main"
       staging-branch-pattern: "release/"
     secrets:
+      IOS_SIGNING_CERTIFICATE_NAME: ${{ secrets.IOS_SIGNING_CERTIFICATE_NAME }}
       IOS_SIGNING_CERTIFICATE_BASE64: ${{ secrets.IOS_SIGNING_CERTIFICATE_BASE64 }}
       IOS_SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.IOS_SIGNING_CERTIFICATE_PASSWORD }}
       IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+      IOS_PROVISIONING_PROFILE_NAME: ${{ secrets.IOS_PROVISIONING_PROFILE_NAME }}
       IOS_KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
       APPSETTINGS_BASE64: ${{ secrets.APPSETTINGS_BASE64 }}
 
@@ -79,11 +74,6 @@ name: Build & Deploy MAUI Android
 on:
   workflow_dispatch:
 
-env:
-  DOTNET_NOLOGO: true # Disable the .NET logo
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_CLI_TELEMETRY_OPTOUT: true # Disable sending .NET CLI telemetry
-
 jobs:
   maui-build-android:
     uses: samuelgustin/maui-workflows/.github/workflows/maui-build-android.yml@main
@@ -98,7 +88,7 @@ jobs:
       production-branch-name: "main"
       staging-branch-pattern: "release/"
     secrets:
-      ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
+      ANDROID_KEYSTORE_FILENAME: ${{ secrets.ANDROID_KEYSTORE_FILENAME }}
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
       APPSETTINGS_BASE64: ${{ secrets.APPSETTINGS_BASE64 }}
