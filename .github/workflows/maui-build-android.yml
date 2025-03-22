@@ -108,7 +108,7 @@ jobs:
           file: "./${{ inputs.project-directory}}${{ inputs.project-name}}.csproj"
 
       - name: Build MAUI Android
-        run: dotnet publish ${{ inputs.project-directory}}${{ inputs.project-name}}.csproj --no-restore -f:net${{ inputs.dotnet-publish-version }}-android -c:Release /p:AndroidSigningKeyPass=${{ secrets.ANDROID_KEYSTORE_ALIAS }} /p:AndroidSigningStorePass=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} /p:AndroidBuildType="Production" /p:ApplicationDisplayVersion="${{ steps.package_version.outputs.version }}" /p:ApplicationVersion="${{ github.run_number }}"
+        run: dotnet publish ${{ inputs.project-directory}}${{ inputs.project-name}}.csproj --no-restore -f:net${{ inputs.dotnet-publish-version }}-android -c:Release /p:AndroidSigningKeyPass=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} /p:AndroidSigningStorePass=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} /p:AndroidBuildType="Production" /p:ApplicationDisplayVersion="${{ steps.package_version.outputs.version }}" /p:ApplicationVersion="${{ github.run_number }}"
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4.3.1
