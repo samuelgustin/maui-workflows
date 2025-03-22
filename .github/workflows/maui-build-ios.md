@@ -92,8 +92,6 @@ jobs:
     with:
       macos-runner-name: "macos-15"
       xcode-version: "16.2"
-      codesigning-identity: "my_codesigning_identity"
-      codesigning-provisioning-profile-name: "distribution_profile_name"
       dotnet-version: "9.0.x"
       dotnet-publish-version: "9.0"
       project-directory: "my-path/"
@@ -103,9 +101,11 @@ jobs:
       production-branch-name: "main"
       staging-branch-pattern: "release/"
     secrets:
+      IOS_SIGNING_CERTIFICATE_NAME: ${{ secrets.IOS_SIGNING_CERTIFICATE_NAME }}
       IOS_SIGNING_CERTIFICATE_BASE64: ${{ secrets.IOS_SIGNING_CERTIFICATE_BASE64 }}
       IOS_SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.IOS_SIGNING_CERTIFICATE_PASSWORD }}
       IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+      IOS_PROVISIONING_PROFILE_NAME: ${{ secrets.IOS_PROVISIONING_PROFILE_NAME }}
       IOS_KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
       APPSETTINGS_BASE64: ${{ secrets.APPSETTINGS_BASE64 }}
 ```
