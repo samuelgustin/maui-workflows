@@ -1,6 +1,6 @@
 # distribute-to-firebase Workflow
 
-This workflow will setup firebase-tools from npm and distribute and artifact to Firebase AppDistribution.
+This workflow will setup firebase-tools from npm and distribute an artifact to Firebase AppDistribution.
 
 A tag will be created - `v1.0.0+123-ios` or `v1.0.0+123-android` for runs on the `production-branch-name`.
 
