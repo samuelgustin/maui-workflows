@@ -105,7 +105,7 @@ jobs:
           additional-restore-args: "-r ios-arm64 ${{inputs.project-directory}}${{ inputs.project-name}}.csproj"
 
       - name: Pull Config From Secrets
-        if: ${{ inputs.appsettings-filename != '' }}
+        if: ${{ inputs.appsettings-filename && inputs.appsettings-filename != '' }}
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: ${{ inputs.appsettings-filename }}
