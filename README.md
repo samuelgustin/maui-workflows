@@ -33,7 +33,7 @@ jobs:
     uses: samuelgustin/maui-workflows/.github/workflows/maui-build-ios.yml@main
     with:
       macos-runner-name: "macos-15"
-      xcode-version: "16.2"=
+      xcode-version: "16.4"=
       dotnet-version: "9.0.x"
       dotnet-publish-version: "9.0"
       project-directory: "my-path/"
