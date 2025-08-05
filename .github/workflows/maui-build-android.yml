@@ -94,7 +94,7 @@ jobs:
           maui-project-directory: ${{ inputs.project-directory }}
 
       - name: Pull Config From Secrets
-        if: ${{ !contains(inputs.appsettings-filename, '') }}
+        if: ${{ inputs.appsettings-filename != '' }}
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: ${{ inputs.appsettings-filename }}
