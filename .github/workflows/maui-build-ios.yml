@@ -22,7 +22,7 @@ on:
         description: "Version of Xcode to use, defaults to 16.2.0"
         required: false
         type: string
-        default: "16.2.0"
+        default: "16.4"
       dotnet-version:
         description: "Version of .NET to use, defaults to 9.0.x"
         required: false
